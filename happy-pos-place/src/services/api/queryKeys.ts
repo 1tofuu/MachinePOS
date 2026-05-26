@@ -1,0 +1,16 @@
+export const queryKeys = {
+  products: ["products"] as const,
+  product: (id: string) => ["products", id] as const,
+  orders: ["orders"] as const,
+  tables: ["tables"] as const,
+  tickets: ["tickets"] as const,
+  customers: ["customers"] as const,
+  staff: ["staff"] as const,
+  staffLoginHistory: ["staff", "login-history"] as const,
+  revenueWeekly: ["revenue", "weekly"] as const,
+  revenueMonthly: ["revenue", "monthly"] as const,
+  salesDaily: (date: string) => ["sales", "daily", date] as const,
+  salesMonthly: (month: string) => ["sales", "monthly", month] as const,
+  categoryBreakdown: ["analytics", "categories"] as const,
+  topSellers: ["analytics", "top-sellers"] as const,
+};
