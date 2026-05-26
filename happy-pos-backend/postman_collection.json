@@ -1,0 +1,387 @@
+{
+	"info": {
+		"_postman_id": "c1f7a0b3-f09c-4613-882f-2d645e751419",
+		"name": "InventoryPro POS Backend API",
+		"description": "Production-grade REST API endpoints for POS terminal, products, customers, and order checkouts.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login Cashier/Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"if (responseJson && responseJson.token) {",
+									"    pm.collectionVariables.set(\"token\", responseJson.token);",
+									"    console.log(\"JWT Token captured and saved successfully!\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"panbunheng58@gmail.com\",\n    \"password\": \"112233\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Exchanges cashier or admin credentials for a secure role-based JWT token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Product List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						},
+						"description": "Returns a full list of products stored inside the SQLite database."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product (Admin/Manager only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Khmer Traditional Honey Croissant\",\n    \"sku\": \"SKU-9921\",\n    \"description\": \"Sweetened honey glaze • fresh baked\",\n    \"price\": 4.25,\n    \"cost\": 1.40,\n    \"category\": \"Pastries\",\n    \"stock\": 50,\n    \"reorderPoint\": 15,\n    \"isActive\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						},
+						"description": "Registers a new pastry or beverage product in inventory."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Artisan Premium Latte\",\n    \"sku\": \"SKU-1001\",\n    \"description\": \"12oz • Quad shot extra milk\",\n    \"price\": 5.00,\n    \"cost\": 1.20,\n    \"category\": \"Coffee & Tea\",\n    \"stock\": 110,\n    \"reorderPoint\": 30,\n    \"isActive\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/p1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"p1"
+							]
+						},
+						"description": "Updates details such as price, cost, and stock for product ID: p1."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/p9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"p9"
+							]
+						},
+						"description": "Removes a product entirely from SQLite DB by ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get Orders List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Fetches historical order checkouts with nested items nested within."
+					},
+					"response": []
+				},
+				{
+					"name": "Place Order (Checkout)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": \"c1\",\n    \"customerName\": \"Jordan Doe\",\n    \"items\": [\n        {\n            \"productId\": \"p1\",\n            \"name\": \"Artisan Latte\",\n            \"quantity\": 2,\n            \"unitPrice\": 4.50\n        },\n        {\n            \"productId\": \"p3\",\n            \"name\": \"Butter Croissant\",\n            \"quantity\": 1,\n            \"unitPrice\": 3.75\n        }\n    ],\n    \"subtotal\": 12.75,\n    \"tax\": 1.08,\n    \"total\": 13.83,\n    \"status\": \"completed\",\n    \"payment\": \"card\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Placing a transaction reduces product inventory stock and increments customer loyalty standings instantly."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get Customers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers"
+							]
+						},
+						"description": "Retrieves the list of regular café customers, complete with loyalty points."
+					},
+					"response": []
+				},
+				{
+					"name": "Register Loyal Customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ken Sopheak\",\n    \"email\": \"ken@sopheak.com\",\n    \"phone\": \"+855 88 123 456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers"
+							]
+						},
+						"description": "Registers a new customer so they can track checkouts and acquire points."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"health"
+					]
+				},
+				"description": "Checks backend health and database verification standing."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
