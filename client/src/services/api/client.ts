@@ -119,6 +119,25 @@ export const api = {
   categoryBreakdown: (): Promise<{ name: string; value: number }[]> =>
     apiFetch<{ name: string; value: number }[]>("/reports/categories"),
   topSellers: (): Promise<TopSeller[]> => apiFetch<TopSeller[]>("/reports/top-sellers"),
+
+  // Payment integration
+  getPayment: (id: string): Promise<any> => apiFetch<any>(`/payments/${id}`),
+  getInvoice: (id: string): Promise<any> => apiFetch<any>(`/invoices/${id}`),
+  createPayment: (invoiceId: string, paymentMethod: string): Promise<any> =>
+    apiFetch<any>("/payments", {
+      method: "POST",
+      body: JSON.stringify({ invoiceId, paymentMethod }),
+    }),
+  verifyPayment: (paymentId: string, transactionReference: string): Promise<any> =>
+    apiFetch<any>("/payments/verify", {
+      method: "POST",
+      body: JSON.stringify({ paymentId, transactionReference }),
+    }),
+  cancelPayment: (paymentId: string): Promise<any> =>
+    apiFetch<any>("/payments/cancel", {
+      method: "POST",
+      body: JSON.stringify({ paymentId }),
+    }),
 };
 
 export type Api = typeof api;

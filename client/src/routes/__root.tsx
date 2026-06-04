@@ -1,12 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { Outlet, Link, createRootRouteWithContext } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/lib/theme";
@@ -36,7 +29,6 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
-  const router = useRouter();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -46,10 +38,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
+            onClick={reset}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
           >
             Try again
@@ -72,10 +61,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "InventoryPro — Enterprise POS & Inventory" },
-      { name: "description", content: "Modern, frontend-first POS and inventory management dashboard." },
+      {
+        name: "description",
+        content: "Modern, frontend-first POS and inventory management dashboard.",
+      },
       { name: "theme-color", content: "#10b981" },
       { property: "og:title", content: "InventoryPro — Enterprise POS" },
-      { property: "og:description", content: "Sell, manage stock, and run reports from one beautifully designed dashboard." },
+      {
+        property: "og:description",
+        content: "Sell, manage stock, and run reports from one beautifully designed dashboard.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -88,17 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
+  return <>{children}</>;
 }
 
 function RootComponent() {
