@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Inter:wght@100..900&display=swap');
 
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
+
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -153,6 +154,7 @@
   * {
     border-color: var(--color-border);
   }
+
   html,
   body {
     background-color: var(--color-background);
@@ -168,6 +170,7 @@
     width: 6px;
     height: 6px;
   }
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: var(--color-border);
     border-radius: 9999px;

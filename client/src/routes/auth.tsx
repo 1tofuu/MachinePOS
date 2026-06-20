@@ -39,7 +39,7 @@ function AuthPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { email: "panbunheng58@gmail.com", password: "112233" },
+    defaultValues: { email: "[panbunheng58@gmail.com]", password: "Heng112233" },
   });
 
   const onSubmit = async (values: FormValues) => {

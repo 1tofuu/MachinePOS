@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Printer, Store, User, Database, Upload, Download, Globe, ShieldAlert } from "lucide-react";
+import { Printer, Store, Database, Upload, Download, Globe, ShieldAlert } from "lucide-react";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -24,7 +24,7 @@ function SettingsPage() {
   const { t, language } = useTranslation();
   const { theme, setTheme } = useTheme();
   const user = useAuthStore((s) => s.user);
-  
+
   // Store Settings state
   const settings = useSettingsStore();
   const [storeName, setStoreName] = useState(settings.storeName);
@@ -85,17 +85,17 @@ function SettingsPage() {
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="store-name">{t("set.store_name")}</Label>
-              <Input 
-                id="store-name" 
-                value={storeName} 
-                onChange={(e) => setStoreName(e.target.value)} 
+              <Input
+                id="store-name"
+                value={storeName}
+                onChange={(e) => setStoreName(e.target.value)}
               />
             </div>
-            
+
             <div className="space-y-1.5">
               <Label>{t("set.currency")}</Label>
-              <Select 
-                value={settings.currencyMode} 
+              <Select
+                value={settings.currencyMode}
                 onValueChange={(val: CurrencyMode) => settings.setCurrencyMode(val)}
               >
                 <SelectTrigger>
@@ -111,10 +111,10 @@ function SettingsPage() {
 
             <div className="space-y-1.5 md:col-span-2">
               <Label htmlFor="store-address">{t("set.store_address")}</Label>
-              <Input 
-                id="store-address" 
-                value={storeAddress} 
-                onChange={(e) => setStoreAddress(e.target.value)} 
+              <Input
+                id="store-address"
+                value={storeAddress}
+                onChange={(e) => setStoreAddress(e.target.value)}
               />
             </div>
 
@@ -159,8 +159,8 @@ function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-1.5">
               <Label>{t("set.user_role")}</Label>
-              <Select 
-                value={settings.userRole} 
+              <Select
+                value={settings.userRole}
                 onValueChange={(val: UserRole) => {
                   settings.setUserRole(val);
                   toast.success(`Role changed to ${val.toUpperCase()}`);
@@ -177,7 +177,7 @@ function SettingsPage() {
               </Select>
               <p className="text-[11px] text-muted-foreground pt-1">{t("set.role_desc")}</p>
             </div>
-            
+
             <div className="border-t border-border pt-4 mt-2">
               <div className="flex items-center gap-3">
                 <Avatar className="h-12 w-12 border-2 border-primary/20">
@@ -212,10 +212,10 @@ function SettingsPage() {
             <div className="flex items-end gap-3">
               <div className="flex-1 space-y-1.5">
                 <Label htmlFor="printer-ip">{t("set.printer_ip")}</Label>
-                <Input 
-                  id="printer-ip" 
-                  value={printerIp} 
-                  onChange={(e) => setPrinterIp(e.target.value)} 
+                <Input
+                  id="printer-ip"
+                  value={printerIp}
+                  onChange={(e) => setPrinterIp(e.target.value)}
                 />
               </div>
               <span className="mb-2 rounded-full bg-emerald-500/15 px-3 py-1 text-[10px] font-bold text-emerald-500">
@@ -242,7 +242,7 @@ function SettingsPage() {
                 <Download className="mr-2 h-4 w-4" /> {t("set.backup_btn")}
               </Button>
             </div>
-            
+
             <div className="border-t border-border pt-4 space-y-2">
               <p className="text-xs text-muted-foreground">{t("set.restore_desc")}</p>
               <input
@@ -282,8 +282,8 @@ function SettingsPage() {
                 </div>
                 <div className="text-xs text-muted-foreground">Select active localized strings</div>
               </div>
-              <Select 
-                value={settings.language} 
+              <Select
+                value={settings.language}
                 onValueChange={(val: Language) => settings.setLanguage(val)}
               >
                 <SelectTrigger className="w-32">
