@@ -1,0 +1,13 @@
+import { Router } from "express";
+import { invoiceController } from "../controllers/invoiceController.js";
+import { authenticateToken, requireRole } from "../middleware/auth.js";
+
+const router = Router();
+
+router.post("/", authenticateToken, (req, res) => invoiceController.createInvoice(req, res));
+router.get("/", authenticateToken, (req, res) => invoiceController.getInvoices(req, res));
+router.get("/:id", authenticateToken, (req, res) => invoiceController.getInvoiceById(req, res));
+router.patch("/:id/status", authenticateToken, (req, res) => invoiceController.updateInvoiceStatus(req, res));
+router.patch("/:id/reopen", authenticateToken, requireRole(["manager", "admin"]), (req, res) => invoiceController.reopenInvoice(req, res));
+
+export default router;

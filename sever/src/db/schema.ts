@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real, index } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 export const products = sqliteTable("products", {
@@ -72,3 +72,44 @@ export const orderItems = sqliteTable("order_items", {
   lineCost: real("line_cost").notNull().default(0),
   lineProfit: real("line_profit").notNull().default(0),
 });
+
+export const invoices = sqliteTable("invoices", {
+  id: text("id").primaryKey(),
+  invoiceNumber: text("invoice_number").notNull().unique(),
+  amount: real("amount").notNull(),
+  status: text("status").notNull().default("PENDING"), // PENDING, PAID, EXPIRED, CANCELLED
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index("idx_invoices_status").on(table.status),
+]);
+
+export const payments = sqliteTable("payments", {
+  id: text("id").primaryKey(),
+  invoiceId: text("invoice_id").notNull().references(() => invoices.id, { onDelete: "cascade" }),
+  amount: real("amount").notNull(),
+  paymentMethod: text("payment_method").notNull(),
+  transactionReference: text("transaction_reference").unique(),
+  status: text("status").notNull().default("PENDING"), // PENDING, PAID, EXPIRED, CANCELLED
+  expiresAt: text("expires_at").notNull(),
+  verifiedAt: text("verified_at"),
+  verifiedBy: text("verified_by").references(() => users.id, { onDelete: "set null" }),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index("idx_payments_invoice_id").on(table.invoiceId),
+  index("idx_payments_status").on(table.status),
+  index("idx_payments_expires_at").on(table.expiresAt),
+]);
+
+export const auditLogs = sqliteTable("audit_logs", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+  invoiceId: text("invoice_id").notNull().references(() => invoices.id, { onDelete: "cascade" }),
+  action: text("action").notNull(), // PAYMENT_CREATED, PAYMENT_VERIFIED, PAYMENT_EXPIRED, PAYMENT_CANCELLED, INVOICE_REOPENED
+  timestamp: text("timestamp").notNull().default(sql`CURRENT_TIMESTAMP`),
+  details: text("details"),
+}, (table) => [
+  index("idx_audit_logs_invoice_id").on(table.invoiceId),
+  index("idx_audit_logs_user_id").on(table.userId),
+]);

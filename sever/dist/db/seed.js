@@ -353,10 +353,10 @@ async function runSeed() {
         const profitTotal = Number((o.subtotal - costTotal).toFixed(2));
         db.insert(orders)
             .values({
-                ...o,
-                costTotal,
-                profitTotal,
-            })
+            ...o,
+            costTotal,
+            profitTotal,
+        })
             .run();
     }
     for (const item of enrichedItems) {
