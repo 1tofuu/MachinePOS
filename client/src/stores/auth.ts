@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { API_URL } from "@/config/env";
 
 export interface User {
   id: string;
@@ -21,7 +22,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       signIn: async (email, password) => {
-        const response = await fetch("http://localhost:5001/api/auth/login", {
+        const response = await fetch(`${API_URL}/api/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +57,7 @@ export const useAuthStore = create<AuthState>()(
       signOut: () => {
         const token = useAuthStore.getState().token;
         if (token) {
-          fetch("http://localhost:5001/api/auth/logout", {
+          fetch(`${API_URL}/api/auth/logout`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
