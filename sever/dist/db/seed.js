@@ -1,7 +1,7 @@
 import { db } from "./connection.js";
 import { products, users, customers, orders, orderItems, staffLoginHistory } from "./schema.js";
 import bcrypt from "bcryptjs";
-const img = (filename) => `http://localhost:5001/img/${filename}`;
+const img = (filename) => `/img/${filename}`;
 const todayIso = (offsetMinutes = 0) => new Date(Date.now() - offsetMinutes * 60_000).toISOString();
 async function runSeed() {
     console.log("🌱 Starting SQLite database seeding...");

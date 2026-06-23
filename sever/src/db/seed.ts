@@ -3,7 +3,7 @@ import { products, users, customers, orders, orderItems, staffLoginHistory } fro
 import bcrypt from "bcryptjs";
 
 const img = (filename: string) =>
-  `http://localhost:5001/img/${filename}`;
+  `/img/${filename}`;
 
 const todayIso = (offsetMinutes = 0) =>
   new Date(Date.now() - offsetMinutes * 60_000).toISOString();

@@ -17,11 +17,31 @@ const productSchema = z.object({
     reorderPoint: z.number().int().nonnegative(),
     isActive: z.boolean().default(true),
 });
+const formatProductImageUrl = (imageUrl, req) => {
+    if (!imageUrl)
+        return imageUrl;
+    if (imageUrl.startsWith("data:") || (imageUrl.startsWith("http") && !imageUrl.startsWith("http://localhost:5001/img/"))) {
+        return imageUrl;
+    }
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.get("host");
+    const backendUrl = (process.env.BACKEND_URL || `${protocol}://${host}`).replace(/\/$/, "");
+    let path = imageUrl;
+    if (path.startsWith("http://localhost:5001/img/")) {
+        path = path.replace("http://localhost:5001", "");
+    }
+    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+    return `${backendUrl}${cleanPath}`;
+};
 // GET all products
 router.get("/", authenticateToken, async (req, res) => {
     try {
         const list = db.select().from(products).all();
-        res.json(list);
+        const formattedList = list.map(p => ({
+            ...p,
+            imageUrl: formatProductImageUrl(p.imageUrl, req)
+        }));
+        res.json(formattedList);
     }
     catch (err) {
         console.error(err);
@@ -36,7 +56,11 @@ router.get("/:id", authenticateToken, async (req, res) => {
         if (!prod) {
             return res.status(404).json({ message: "Product not found" });
         }
-        res.json(prod);
+        const formattedProd = {
+            ...prod,
+            imageUrl: formatProductImageUrl(prod.imageUrl, req)
+        };
+        res.json(formattedProd);
     }
     catch (err) {
         console.error(err);
