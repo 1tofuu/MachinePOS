@@ -74,5 +74,5 @@ app.get("/", (req, res) => {
 server.listen(PORT, () => {
   console.log(`🚀 Industry POS server running at: http://localhost:${PORT}`);
   console.log(`📡 Health Check URL: http://localhost:${PORT}/health`);
-  startScheduler();
+  // startScheduler();
 });
