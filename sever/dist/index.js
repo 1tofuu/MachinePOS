@@ -33,7 +33,7 @@ app.use(cors({
 }));
 app.use(express.json());
 // Serve static images from the workspace img folder
-app.use("/img", express.static(path.resolve(__dirname, "../../img")));
+app.use("/img", express.static(path.resolve(__dirname, "../img")));
 // Expose API router routes
 app.use("/api/auth", authRouter);
 app.use("/api/products", productsRouter);
