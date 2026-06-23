@@ -16,7 +16,6 @@ import invoiceRouter from "./routes/invoiceRoutes.js";
 import paymentRouter from "./routes/paymentRoutes.js";
 import auditLogRouter from "./routes/auditLogRoutes.js";
 import { initializeStaffStatusSocket } from "./realtime/staffStatus.js";
-import { startScheduler } from "./scheduler.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Load env variables
@@ -59,5 +58,5 @@ app.get("/", (req, res) => {
 server.listen(PORT, () => {
     console.log(`🚀 Industry POS server running at: http://localhost:${PORT}`);
     console.log(`📡 Health Check URL: http://localhost:${PORT}/health`);
-    startScheduler();
+    // startScheduler();
 });

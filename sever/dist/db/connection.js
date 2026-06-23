@@ -9,5 +9,8 @@ const __dirname = path.dirname(__filename);
 // Load env
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 const dbUrl = process.env.DATABASE_URL || "sqlite.db";
+console.log("=================================");
+console.log("DATABASE PATH:", dbUrl);
+console.log("=================================");
 const sqlite = new Database(dbUrl);
 export const db = drizzle(sqlite, { schema });
