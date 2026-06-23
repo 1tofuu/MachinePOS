@@ -12,8 +12,8 @@ import type {
   StaffMember,
   TopSeller,
 } from "./types";
-
-const BASE_URL = "http://localhost:5001/api";
+import { API_URL } from "@/config/env";
+const BASE_URL = API_URL + "/api";
 
 const delay = <T,>(data: T, ms = 300): Promise<T> =>
   new Promise((res) => setTimeout(() => res(data), ms));
@@ -21,7 +21,7 @@ const delay = <T,>(data: T, ms = 300): Promise<T> =>
 // Core fetch helper with JWT validation support
 async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = useAuthStore.getState().token;
-  
+
   const headers = new Headers(options.headers || {});
   headers.set("Content-Type", "application/json");
   if (token) {
@@ -38,7 +38,7 @@ async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise
     try {
       const errData = await response.json();
       errMsg = errData.message || errMsg;
-    } catch {}
+    } catch { }
     throw new Error(errMsg);
   }
 
@@ -56,7 +56,7 @@ async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise
 export const api = {
   // Products / inventory (linked to SQLite DB)
   listProducts: (): Promise<Product[]> => apiFetch<Product[]>("/products"),
-  getProduct: (id: string): Promise<Product | undefined> => 
+  getProduct: (id: string): Promise<Product | undefined> =>
     apiFetch<Product>(`/products/${id}`).catch(() => undefined),
   createProduct: (product: Omit<Product, "id">): Promise<Product> =>
     apiFetch<Product>("/products", {

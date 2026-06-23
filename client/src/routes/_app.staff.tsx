@@ -26,6 +26,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { API_URL } from "@/config/env";
 
 export const Route = createFileRoute("/_app/staff")({
   beforeLoad: () => {
@@ -46,7 +47,8 @@ const STATUS_VARIANT: Record<StaffStatus, "success" | "warning" | "muted"> = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GMAIL_REGEX = /^[^\s@]+@gmail\.com$/;
-const SOCKET_URL = "http://localhost:5001";
+
+const SOCKET_URL = API_URL;
 
 function StaffPage() {
   const queryClient = useQueryClient();
@@ -246,17 +248,17 @@ function StaffPage() {
                     <td className="px-4 py-3 text-right">
                       {userRole === "admin" ? (
                         <div className="flex justify-end gap-1">
-                          <Button 
-                            size="icon" 
-                            variant="ghost" 
+                          <Button
+                            size="icon"
+                            variant="ghost"
                             onClick={() => handleOpenEdit(s)}
                             aria-label="Edit"
                           >
                             <Edit2 className="h-4 w-4 text-muted-foreground hover:text-foreground" />
                           </Button>
-                          <Button 
-                            size="icon" 
-                            variant="ghost" 
+                          <Button
+                            size="icon"
+                            variant="ghost"
                             className="hover:text-destructive hover:bg-destructive/10"
                             onClick={() => handleDeleteStaff(s.id, s.name)}
                             aria-label="Delete"
@@ -353,8 +355,8 @@ function StaffPage() {
               {/* Role select */}
               <div className="space-y-1.5">
                 <Label className="font-semibold text-xs">Role *</Label>
-                <Select 
-                  value={formRole} 
+                <Select
+                  value={formRole}
                   onValueChange={(val: any) => setFormRole(val)}
                 >
                   <SelectTrigger id="staff-role">
@@ -371,8 +373,8 @@ function StaffPage() {
               {editingStaff && (
                 <div className="space-y-1.5">
                   <Label className="font-semibold text-xs">Status *</Label>
-                  <Select 
-                    value={formStatus} 
+                  <Select
+                    value={formStatus}
                     onValueChange={(val: any) => setFormStatus(val)}
                   >
                     <SelectTrigger id="staff-status">
@@ -392,8 +394,8 @@ function StaffPage() {
               <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isSubmitting}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
               >

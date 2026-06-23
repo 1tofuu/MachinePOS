@@ -8,8 +8,10 @@ import type {
   StaffMember,
 } from "./types";
 
+import { API_URL } from "@/config/env";
 const img = (filename: string) =>
-  `http://localhost:5001/img/${filename}`;
+
+  `${API_URL}/img/${filename}`;
 
 export const mockProducts: Product[] = [
   {
